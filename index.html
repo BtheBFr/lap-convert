@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lap Convert от Lap.comp</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Шапка -->
+        <div class="header">
+            <h1>Lap Convert <span class="from">от Lap.comp</span></h1>
+            <button class="menu-btn">☰</button>
+        </div>
+
+        <!-- Зона загрузки -->
+        <div class="upload-area" id="uploadArea">
+            <div class="upload-content">
+                <div class="upload-icon">📁</div>
+                <div class="upload-text">ПЕРЕТАЩИ ФАЙЛ СЮДА</div>
+                <div class="upload-subtext">или нажми для выбора</div>
+                <input type="file" id="fileInput" class="file-input" hidden>
+            </div>
+            <div class="supported-formats">
+                <span class="format-badge">🎬 MP4, AVI, MOV, MKV, WEBM</span>
+                <span class="format-badge">🎵 MP3, WAV, FLAC, M4A, OGG</span>
+                <span class="format-badge">🖼️ JPG, PNG, GIF</span>
+            </div>
+        </div>
+
+        <!-- Информация о файле (скрыто по умолчанию) -->
+        <div class="file-info" id="fileInfo" style="display: none;">
+            <div class="file-details">
+                <span class="file-name" id="fileName">example.mp4</span>
+                <span class="file-size" id="fileSize">15.3 MB</span>
+                <span class="file-duration" id="fileDuration">02:45</span>
+            </div>
+        </div>
+
+        <!-- Выбор формата конвертации -->
+        <div class="converter-section" id="converterSection" style="display: none;">
+            <div class="convert-label">Конвертировать в:</div>
+            <div class="format-grid" id="formatGrid"></div>
+        </div>
+
+        <!-- Кнопка конвертации (скрыта по умолчанию) -->
+        <div class="convert-btn-container" id="convertBtnContainer" style="display: none;">
+            <button class="convert-btn" id="convertBtn">
+                <span class="btn-icon">⚡</span>
+                КОНВЕРТИРОВАТЬ
+            </button>
+        </div>
+
+        <!-- Прогресс конвертации (скрыт по умолчанию) -->
+        <div class="progress-section" id="progressSection" style="display: none;">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">0%</div>
+        </div>
+
+        <!-- Примеры конвертации -->
+        <div class="examples">
+            <div class="examples-title">Примеры конвертации:</div>
+            <div class="examples-grid">
+                <div class="example-item" data-from="mp4" data-to="avi">• MP4 → AVI</div>
+                <div class="example-item" data-from="mp4" data-to="mp3">• MP4 → MP3</div>
+                <div class="example-item" data-from="mp3" data-to="mp4">• MP3 → MP4</div>
+                <div class="example-item" data-from="mov" data-to="gif">• MOV → GIF</div>
+                <div class="example-item" data-from="avi" data-to="mp4">• AVI → MP4</div>
+                <div class="example-item" data-from="mkv" data-to="mp4">• MKV → MP4</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
