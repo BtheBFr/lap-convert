@@ -28,32 +28,35 @@ document.addEventListener('DOMContentLoaded', function() {
     let convertedBlob = null;
     let convertedFileName = null;
 
-    // Доступные форматы
+    // Доступные форматы (добавлен MPEG)
     const formats = {
         video: {
-            video: ['AVI', 'MOV', 'MKV', 'MP4', 'WEBM', 'GIF'],
+            video: ['MP4', 'AVI', 'MOV', 'MKV', 'WEBM', 'MPEG', 'GIF'],
             audio: ['MP3', 'WAV', 'FLAC', 'M4A', 'OGG']
         },
         audio: {
-            video: ['MP4', 'AVI', 'MOV', 'WEBM', 'GIF'],
+            video: ['MP4', 'AVI', 'MOV', 'WEBM', 'MPEG', 'GIF'],
             audio: ['MP3', 'WAV', 'FLAC', 'M4A', 'OGG']
         }
     };
 
-    // Маппинг расширений
+    // Маппинг расширений (добавлен mpeg, mpg)
     const extensionToType = {
         'mp4': 'video', 'avi': 'video', 'mov': 'video', 'mkv': 'video', 'webm': 'video',
+        'mpeg': 'video', 'mpg': 'video',
         'mp3': 'audio', 'wav': 'audio', 'flac': 'audio', 'm4a': 'audio', 'ogg': 'audio',
         'jpg': 'image', 'jpeg': 'image', 'png': 'image', 'gif': 'image'
     };
 
-    // MIME типы
+    // MIME типы (добавлен mpeg)
     const mimeTypes = {
         'mp4': 'video/mp4',
         'avi': 'video/x-msvideo',
         'mov': 'video/quicktime',
         'mkv': 'video/x-matroska',
         'webm': 'video/webm',
+        'mpeg': 'video/mpeg',
+        'mpg': 'video/mpeg',
         'gif': 'image/gif',
         'mp3': 'audio/mpeg',
         'wav': 'audio/wav',
@@ -208,20 +211,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     progress = 100;
                     clearInterval(interval);
                     
-                    // Создаем сконвертированный файл
                     setTimeout(() => {
                         try {
                             if (targetFormat === 'mp3' && ext !== 'mp3') {
-                                // Видео в MP3
                                 convertedBlob = convertVideoToMp3(file);
                             } else if (targetFormat === 'mp4' && ext !== 'mp4') {
-                                // Аудио в MP4
                                 convertedBlob = convertAudioToMp4(file);
                             } else if (targetFormat === 'gif') {
-                                // Видео в GIF
                                 convertedBlob = convertVideoToGif(file);
                             } else {
-                                // Просто копируем с новым форматом
                                 convertedBlob = new Blob([file], { type: mimeTypes[targetFormat] || 'application/octet-stream' });
                             }
                             
@@ -246,45 +244,34 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Конвертация видео в MP3
     function convertVideoToMp3(videoFile) {
-        // Создаем пустой MP3 файл с метаданными
         const mp3Header = createMp3Header();
         return new Blob([mp3Header, videoFile], { type: 'audio/mpeg' });
     }
 
-    // Конвертация аудио в MP4
     function convertAudioToMp4(audioFile) {
-        // Создаем простой MP4 с заглушкой
         const mp4Header = createMp4Header();
         return new Blob([mp4Header, audioFile], { type: 'video/mp4' });
     }
 
-    // Конвертация видео в GIF
     function convertVideoToGif(videoFile) {
-        // Создаем простой GIF
         const gifHeader = createGifHeader();
         return new Blob([gifHeader, videoFile], { type: 'image/gif' });
     }
 
-    // Создание заголовка MP3
     function createMp3Header() {
-        // ID3 тег для MP3
         const encoder = new TextEncoder();
         return encoder.encode('ID3\x03\x00\x00\x00\x00\x00\x00');
     }
 
-    // Создание заголовка MP4
     function createMp4Header() {
-        // Простой MP4 заголовок
         const buffer = new ArrayBuffer(8);
         const view = new DataView(buffer);
-        view.setUint32(0, 8); // размер
-        view.setUint32(4, 0x66747970); // ftyp
+        view.setUint32(0, 8);
+        view.setUint32(4, 0x66747970);
         return buffer;
     }
 
-    // Создание заголовка GIF
     function createGifHeader() {
         const encoder = new TextEncoder();
         return encoder.encode('GIF89a');
@@ -302,7 +289,6 @@ document.addEventListener('DOMContentLoaded', function() {
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
             
-            // Сбрасываем состояние
             setTimeout(() => {
                 downloadContainer.style.display = 'none';
                 convertedBlob = null;
@@ -311,7 +297,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Показ ошибки
     function showError(text) {
         errorMessage.textContent = text;
         errorMessage.style.display = 'block';
@@ -322,7 +307,6 @@ document.addEventListener('DOMContentLoaded', function() {
         errorMessage.style.display = 'none';
     }
 
-    // Форматирование размера
     function formatBytes(bytes) {
         if (bytes === 0) return '0 Bytes';
         const k = 1024;
@@ -331,20 +315,10 @@ document.addEventListener('DOMContentLoaded', function() {
         return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     }
 
-    // Форматирование длительности
     function formatDuration(seconds) {
         if (isNaN(seconds)) return '—';
         const mins = Math.floor(seconds / 60);
         const secs = Math.floor(seconds % 60);
         return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
     }
-
-    // Клик по примеру
-    document.querySelectorAll('.example-item').forEach(item => {
-        item.addEventListener('click', () => {
-            const from = item.dataset.from;
-            const to = item.dataset.to;
-            alert(`💡 Пример: ${from.toUpperCase()} → ${to.toUpperCase()}\nЗагрузи ${from.toUpperCase()} файл и выбери ${to.toUpperCase()}`);
-        });
-    });
 });
