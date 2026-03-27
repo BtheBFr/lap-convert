@@ -341,43 +341,6 @@ body {
     font-weight: 500;
 }
 
-/* Примеры */
-.examples {
-    margin-top: 30px;
-    border-top: 1px solid #2a2f38;
-    padding-top: 20px;
-}
-
-.examples-title {
-    font-size: 14px;
-    color: #8b949e;
-    margin-bottom: 15px;
-    font-weight: 500;
-}
-
-.examples-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 10px;
-}
-
-.example-item {
-    color: #ffd700;
-    cursor: pointer;
-    font-size: 13px;
-    padding: 8px;
-    border-radius: 8px;
-    transition: all 0.3s;
-    background: #0f1319;
-    border: 1px solid #2a2f38;
-    text-align: center;
-}
-
-.example-item:hover {
-    background: #1a1f27;
-    border-color: #ffd700;
-}
-
 /* Медиа-запросы для телефонов */
 @media (max-width: 600px) {
     .container {
