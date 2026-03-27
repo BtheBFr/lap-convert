@@ -27,17 +27,17 @@ document.addEventListener('DOMContentLoaded', function() {
     let selectedFormat = null;
     let convertedBlob = null;
     let convertedFileName = null;
-    let currentConvertType = 'video'; // текущий выбранный тип конвертации
+    let currentConvertType = 'audio'; // ТЕПЕРЬ ПО УМОЛЧАНИЮ АУДИО!
 
-    // Доступные форматы
+    // ДОСТУПНЫЕ ФОРМАТЫ - MPEG ТЕПЕРЬ В АУДИО ТОЖЕ!
     const formats = {
         video: {
             video: ['MP4', 'AVI', 'MOV', 'MKV', 'WEBM', 'MPEG', 'GIF'],
-            audio: ['MP3', 'WAV', 'FLAC', 'M4A', 'OGG']
+            audio: ['MP3', 'WAV', 'FLAC', 'M4A', 'OGG', 'MPEG']
         },
         audio: {
             video: ['MP4', 'AVI', 'MOV', 'WEBM', 'MPEG', 'GIF'],
-            audio: ['MP3', 'WAV', 'FLAC', 'M4A', 'OGG']
+            audio: ['MP3', 'WAV', 'FLAC', 'M4A', 'OGG', 'MPEG']
         }
     };
 
@@ -49,14 +49,14 @@ document.addEventListener('DOMContentLoaded', function() {
         'jpg': 'image', 'jpeg': 'image', 'png': 'image', 'gif': 'image'
     };
 
-    // MIME типы
+    // MIME типы (добавлен MPEG для аудио)
     const mimeTypes = {
         'mp4': 'video/mp4',
         'avi': 'video/x-msvideo',
         'mov': 'video/quicktime',
         'mkv': 'video/x-matroska',
         'webm': 'video/webm',
-        'mpeg': 'video/mpeg',
+        'mpeg': 'audio/mpeg',  // MPEG аудио = MP3 по сути
         'mpg': 'video/mpeg',
         'gif': 'image/gif',
         'mp3': 'audio/mpeg',
@@ -98,7 +98,6 @@ document.addEventListener('DOMContentLoaded', function() {
             typeBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             currentConvertType = btn.dataset.type;
-            // Обновляем сетку форматов
             showAvailableFormats(currentFileType, currentConvertType);
         });
     });
@@ -130,19 +129,41 @@ document.addEventListener('DOMContentLoaded', function() {
         // Сбрасываем выбранный формат
         selectedFormat = null;
         
-        // Показываем форматы для текущего типа файла
-        // По умолчанию показываем видео форматы
-        currentConvertType = 'video';
-        // Активируем кнопку Видео
-        typeBtns.forEach(btn => {
-            if (btn.dataset.type === 'video') {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
-        
-        showAvailableFormats(currentFileType, 'video');
+        // ЕСЛИ ЭТО АУДИО ФАЙЛ - ПОКАЗЫВАЕМ АУДИО ФОРМАТЫ
+        if (currentFileType === 'audio') {
+            currentConvertType = 'audio';
+            typeBtns.forEach(btn => {
+                if (btn.dataset.type === 'audio') {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            showAvailableFormats(currentFileType, 'audio');
+        } 
+        // ЕСЛИ ВИДЕО - ПОКАЗЫВАЕМ ВИДЕО ФОРМАТЫ
+        else if (currentFileType === 'video') {
+            currentConvertType = 'video';
+            typeBtns.forEach(btn => {
+                if (btn.dataset.type === 'video') {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            showAvailableFormats(currentFileType, 'video');
+        }
+        else {
+            currentConvertType = 'video';
+            typeBtns.forEach(btn => {
+                if (btn.dataset.type === 'video') {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            showAvailableFormats(currentFileType, 'video');
+        }
     }
 
     // Получение длительности
