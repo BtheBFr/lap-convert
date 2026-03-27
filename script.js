@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let convertedBlob = null;
     let convertedFileName = null;
 
-    // Доступные форматы (добавлен MPEG)
+    // Доступные форматы (MPEG в видео и аудио)
     const formats = {
         video: {
             video: ['MP4', 'AVI', 'MOV', 'MKV', 'WEBM', 'MPEG', 'GIF'],
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    // Маппинг расширений (добавлен mpeg, mpg)
+    // Маппинг расширений
     const extensionToType = {
         'mp4': 'video', 'avi': 'video', 'mov': 'video', 'mkv': 'video', 'webm': 'video',
         'mpeg': 'video', 'mpg': 'video',
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
         'jpg': 'image', 'jpeg': 'image', 'png': 'image', 'gif': 'image'
     };
 
-    // MIME типы (добавлен mpeg)
+    // MIME типы
     const mimeTypes = {
         'mp4': 'video/mp4',
         'avi': 'video/x-msvideo',
