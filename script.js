@@ -27,8 +27,9 @@ document.addEventListener('DOMContentLoaded', function() {
     let selectedFormat = null;
     let convertedBlob = null;
     let convertedFileName = null;
+    let currentConvertType = 'video'; // текущий выбранный тип конвертации
 
-    // Доступные форматы (MPEG в видео и аудио)
+    // Доступные форматы
     const formats = {
         video: {
             video: ['MP4', 'AVI', 'MOV', 'MKV', 'WEBM', 'MPEG', 'GIF'],
@@ -96,7 +97,9 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.addEventListener('click', () => {
             typeBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            showAvailableFormats(currentFileType, btn.dataset.type);
+            currentConvertType = btn.dataset.type;
+            // Обновляем сетку форматов
+            showAvailableFormats(currentFileType, currentConvertType);
         });
     });
 
@@ -123,6 +126,22 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         conversionType.style.display = 'block';
+        
+        // Сбрасываем выбранный формат
+        selectedFormat = null;
+        
+        // Показываем форматы для текущего типа файла
+        // По умолчанию показываем видео форматы
+        currentConvertType = 'video';
+        // Активируем кнопку Видео
+        typeBtns.forEach(btn => {
+            if (btn.dataset.type === 'video') {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+        
         showAvailableFormats(currentFileType, 'video');
     }
 
@@ -145,8 +164,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Показ доступных форматов
     function showAvailableFormats(fileType, convertTo) {
+        console.log('fileType:', fileType, 'convertTo:', convertTo);
         const availableFormats = formats[fileType]?.[convertTo] || [];
+        console.log('availableFormats:', availableFormats);
+        
         formatGrid.innerHTML = '';
+
+        if (availableFormats.length === 0) {
+            const emptyMsg = document.createElement('div');
+            emptyMsg.textContent = 'Нет доступных форматов';
+            emptyMsg.style.color = '#8b949e';
+            emptyMsg.style.padding = '20px';
+            emptyMsg.style.textAlign = 'center';
+            formatGrid.appendChild(emptyMsg);
+        }
 
         availableFormats.forEach(format => {
             const btn = document.createElement('button');
@@ -168,6 +199,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         btn.classList.add('selected');
         selectedFormat = format.toLowerCase();
+        console.log('Выбран формат:', selectedFormat);
     }
 
     // Конвертация
